@@ -8,6 +8,7 @@ struct rtcdate;
 struct spinlock;
 struct stat;
 struct superblock;
+struct vm;
 
 // bio.c
 void            binit(void);
@@ -115,6 +116,16 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+
+int             procAlloc(int);
+int             procFree(void*);
+
+// alloc.c
+void            initAlloc(); 
+void*           alloc(pde_t*, struct vm*, uint); 
+int             free( pde_t*, struct vm*, void*); 
+void            initProcVM(struct vm*); 
+struct vm*      copyVM( pde_t*, pde_t*, struct vm*); 
 
 // swtch.S
 void            swtch(struct context**, struct context*);

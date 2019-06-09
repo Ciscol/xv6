@@ -89,3 +89,18 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+int sys_Alloc(void){ 
+  int nbytes; 
+  if( argint(0, &nbytes) < 0 ) 
+    return -1; 
+  return procAlloc(nbytes); 
+} 
+
+int sys_Free(void){ 
+  int addr; 
+  if( argint(0, &addr) < 0 ){ 
+    return -1; 
+  } 
+  return procFree((void*)addr); 
+} 
