@@ -113,8 +113,24 @@ void            sched(void);
 void            sleep(void*, struct spinlock*);
 void            userinit(void);
 int             wait(void);
+void		wakeup1p(void*);
 void            wakeup(void*);
 void            yield(void);
+
+int		getcpuid(void);
+
+
+int		testtest(void);
+int		testE(void);
+
+// semaphore.c
+void            sem_init(void);
+int             create_sem(int);
+int             sem_p(int);
+int             sem_v(int);
+int             free_sem(int);
+int             sh_var_read(void);
+void            sh_var_write(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
