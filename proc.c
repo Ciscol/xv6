@@ -101,8 +101,19 @@ userinit(void)
 
   p->state = RUNNABLE;
 
+  p->vm = 0;
+
   release(&ptable.lock);
 }
+
+int procAlloc(int n){
+  return (int)alloc(proc->pgdir, proc->vm, n);
+}
+
+int procFree(void* addr){
+  return free(proc->pgdir, proc->vm, addr);
+}
+
 
 // Grow current process's memory by n bytes.
 // Return 0 on success, -1 on failure.
@@ -162,6 +173,8 @@ fork(void)
   np->cwd = idup(proc->cwd);
 
   safestrcpy(np->name, proc->name, sizeof(proc->name));
+
+  np->vm = copyVM(np->pgdir, proc->pgdir, proc->vm);
 
   pid = np->pid;
 
@@ -473,5 +486,13 @@ procdump(void)
         cprintf(" %p", pc[i]);
     }
     cprintf("\n");
+     
+    if( p->vm ){ 
+      struct vma* vma = p->vm->vmalist; 
+      while( vma ){  
+        cprintf("start: %d      length: %d\n", vma->start,vma->length);
+        vma = vma->next; 
+      } 
+    } 
   }
 }
